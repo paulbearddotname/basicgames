@@ -1,0 +1,247 @@
+%Header Record
+Format:TXT
+Communication SW:0
+Data Type:PG
+Capacity:4296
+File Name:Mines 10
+Group Name:
+Password:
+Option1:NL
+Option2:
+Option3:
+Option4:
+%Data Record
+\ViewWindow 1,128,0,1,64,0
+\Lbl 1
+1\->Q
+\Cls
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(2-1)+1,1,"  Mine Sweeper. - Version 10"
+\Text 6*(3-1)+1,1,"   (C) Paul Beard 2006. "
+\Text 6*(6-1)+1,6*(4-1)+1,"press EXE f\or new game,"
+\Text 6*(7-1)+1,6*(3-1)+1,"press EXP to load game \or"
+\Text 6*(8-1)+1,6*(2-1)+1,"press SPACE f\or instructions,"
+\Text 6*(9-1)+1,6*(5-1)+1,"press EXIT to quit"
+\Text 6*(10-1)+1,1,"#####################"
+\Do
+\Do
+\Getkey\->A
+Q=1\=>\Text 23,1,"M~~~M~~~M~~~M~~~M~~~M~~~M~~~"
+Q=2\=>\Text 23,1,"~M~~~M~~~M~~~M~~~M~~~M~~~M~~"
+Q=3\=>\Text 23,1,"~~M~~~M~~~M~~~M~~~M~~~M~~~M~"
+Q=4\=>\Text 23,1,"~~~M~~~M~~~M~~~M~~~M~~~M~~~M"
+Q+1\->Q
+Q=5\=>1\->Q
+\LpWhile A=0
+A=47\=>\Cls
+A=47\=>\Goto9
+A=51\=>\Goto3
+\If A=61
+\Then \Cls
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(2-1)+1,1,"  Mine Sweeper Instructions."
+\Text 6*(3-1)+1,1,"   EXE - Mark as clear."
+\Text 6*(4-1)+1,1,"   SPACE - Mark as mine."
+\Text 6*(5-1)+1,1,"   EXP - Save \and exit."
+\Text 6*(6-1)+1,1,"   EXIT - Exit game."
+\Text 6*(7-1)+1,1,"   MENU - \Return to menu."
+\Text 6*(8-1)+1,1,"   ARROWS - Move curs\or."
+\Text 6*(9-1)+1,1,"   ^ - Cheat button."
+\Text 6*(10-1)+1,1,"#####################"
+\Do
+\Getkey\->A
+\LpWhile A\<>31\ And A\<>47\ And A\<>48
+\Goto1
+\IfEnd
+\LpWhile A\<>31
+{10,31}\->\Dim \Mat P
+{10,31}\->\Dim \Mat C
+\Do
+\Cls
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(2-1)+1,1," How many mines do you want "
+\Text 6*(3-1)+1,1,"  hidden on the field?      "
+\Text 6*(4-1)+1,1," You can choose any integer "
+\Text 6*(5-1)+1,1,"  between 1\ And 310.        "
+\Text 6*(6-1)+1,1," Mines are placed at r\andom."
+\Text 6*(10-1)+1,1,"#####################"
+8\->R
+0\->Z
+0\->Q
+0\->B
+\Do
+\Text 6*(R-1)+1,10,"               "
+\Text 6*(R-1)+1,10,Z
+\Do
+\Getkey\->A
+\LpWhile A=0
+\If A=44
+\Then 0\->Z
+0\->Q
+\IfEnd
+A=71\=>0\->B
+A=72\=>1\->B
+A=62\=>2\->B
+A=52\=>3\->B
+A=73\=>4\->B
+A=63\=>5\->B
+A=53\=>6\->B
+A=74\=>7\->B
+A=64\=>8\->B
+A=54\=>9\->B
+\If A\<>61\ And A\<>44\ And A\<>31
+\Then \If Q=0
+\Then Z*10\->Z
+Z+B\->Z
+\Else (B/(10^Q)+Z)\->Z
+Q+1\->Q
+\IfEnd
+\IfEnd
+A=61\ And Q=0\=>1\->Q
+\Do
+A\<>31\=>\Getkey\->A
+\LpWhile A\<>0\ And A\<>31
+\LpWhile A\<>31
+Z\->J
+\Int J\->J
+\LpWhile J>310\ Or J<1
+\Cls
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(2-1)+1,1," Please wait while          "
+\Text 6*(3-1)+1,1," Mine Sweeper chooses where "
+\Text 6*(4-1)+1,1," to hide the mines.         "
+\Text 6*(6-1)+1,1," There are     mines to go. "
+\Text 6*(8-1)+1,1," \If at any stage you want   "
+\Text 6*(9-1)+1,1,"  to quit press EXIT.       "
+\Text 6*(10-1)+1,1,"#####################"
+J\->P:16\->N
+5\->M:0\->T
+\Fill(9,\Mat C)
+\Fill(0,\Mat P)
+0\->U
+\Do
+\Getkey=47\=>\Goto1
+\Text 6*(6-1)+1,4*(12-1)+1,"   "
+\Text 6*(6-1)+1,4*(12-1)+1,J-U
+\Do
+\Int 21\Ran#+1\->B
+\Int 10\Ran#+1\->V
+\LpWhile \Mat P[V,B]\>=10
+10\->\Mat P[V,B]
+B-1>0\ And B-1<32\ And V-1>0\ And V-1<11\=>\Mat P[V-1,B-1]+1\->\Mat P[V-1,B-1]
+B-1>0\ And B-1<32\=>\Mat P[V,B-1]+1\->\Mat P[V,B-1]
+B-1>0\ And B-1<32\ And V+1>0\ And V+1<11\=>\Mat P[V+1,B-1]+1\->\Mat P[V+1,B-1]
+V-1>0\ And V-1<11\=>\Mat P[V-1,B]+1\->\Mat P[V-1,B]
+V+1>0\ And V+1<11\=>\Mat P[V+1,B]+1\->\Mat P[V+1,B]
+B+1>0\ And B+1<32\ And V-1>0\ And V-1<11\=>\Mat P[V-1,B+1]+1\->\Mat P[V-1,B+1]
+B+1>0\ And B+1<32\=>\Mat P[V,B+1]+1\->\Mat P[V,B+1]
+B+1>0\ And B+1<32\ And V+1>0\ And V+1<11\=>\Mat P[V+1,B+1]+1\->\Mat P[V+1,B+1]
+U+1\->U
+\LpWhile U<J
+\Cls
+\For 1\->A \To 10
+\Text 6*(A-1)+1,1,"HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+\Next 
+\Goto7
+\Lbl 3
+\Cls
+\RclPict 1
+\Lbl 7
+\Do
+\Text 6*(M-1)+1,4*(N-1)+1,"+"
+\Do:\Getkey\->A:\LpWhile A=0
+\If A=51
+\Then \StoPict 1
+\Cls
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(2-1)+1,1," Game Saved"
+\Text 6*(4-1)+1,1,"  \Don't edit the following"
+\Text 6*(5-1)+1,1,"  \Mat P, \Mat C, Pic 1"
+\Text 6*(6-1)+1,1,"  Var M, Var N, Var T"
+\Text 6*(7-1)+1,1,"  Var J, Var P"
+\Text 6*(9-1)+1,1," press EXIT."
+\Text 6*(10-1)+1,1,"#####################"
+\Do
+\LpWhile \Getkey\<>47
+\Goto9
+\IfEnd
+\If A=57
+\Then \Mat C[M,N]\->B
+B\>=10\=>\Text 6*(M-1)+1,4*(N-1)+1,"M"
+B=0\=>\Text 6*(M-1)+1,4*(N-1)+1," "
+B>0\ And B<9\=>\Text 6*(M-1)+1,4*(N-1)+1,B
+B=9\=>\Text 6*(M-1)+1,4*(N-1)+1,"H"
+\Do
+\Int 31\Ran#+1\->N
+\Int 10\Ran#+1\->M
+\LpWhile \Mat C[M,N]\<>9
+\Mat P[M,N]\>=10\=>\Goto2
+\Mat P[M,N]<9\=>\Goto6
+\IfEnd
+\If A=48\ Or A=47
+\Then {1,1}\->\Dim \Mat P
+{1,1}\->\Dim \Mat C
+\Goto1
+\IfEnd
+\If A=28\ Or A=37\ Or A=38\ Or A=27
+\Then \Mat C[M,N]<9\ And \Mat C[M,N]\<>0\=>\Text 6*(M-1)+1,4*(N-1)+1,\Mat C[M,N]
+\Mat C[M,N]\>=10\=>\Text 6*(M-1)+1,4*(N-1)+1,"M"
+\Mat C[M,N]=0\=>\Text 6*(M-1)+1,4*(N-1)+1," "
+\Mat C[M,N]=9\=>\Text 6*(M-1)+1,4*(N-1)+1,"H"
+\IfEnd
+A=28\ And M>1\=>M-1\->M
+A=37\ And M<10\=>M+1\->M
+A=38\ And N>1\=>N-1\->N
+A=27\ And N<31\=>N+1\->N
+\LpWhile A\<>61\ And A\<>31
+\Lbl 2
+A=31\=>\Goto6
+\If \Mat C[M,N]=9
+\Then P>0\=>10\->\Mat C[M,N]
+P>0\ And \Mat P[M,N]\>=10\=>T+1\->T
+P>0\=>P-1\->P
+\If T=J
+\Then \Cls
+\Text 6*(4-1)+1,4*(3-1)+1,"You won this time "
+\Goto8
+\IfEnd
+\Goto7
+\IfEnd
+\If \Mat C[M,N]\>=10
+\Then 9\->\Mat C[M,N]
+P+1\->P
+\Mat P[M,N]=10\=>T-1\->T
+\Goto7
+\IfEnd
+\Lbl 6
+\If \Mat C[M,N]=9
+\Then \Mat P[M,N]\->\Mat C[M,N]
+\If \Mat C[M,N]\>=10
+\Then \Cls
+\Text 6*(4-1)+1,4*(3-1)+1,"Your dead BITCH"
+\Goto8
+\IfEnd
+\IfEnd
+\Goto7
+\Lbl 8
+\Text 6*(1-1)+1,1,"#####################"
+\Text 6*(3-1)+1,1," Game Over\!mark"
+\Text 6*(8-1)+1,1," press MENU to continue."
+\Text 6*(10-1)+1,1,"#####################"
+{1,1}\->\Dim \Mat P
+{1,1}\->\Dim \Mat C
+1\->Q
+\Do:\Getkey\->A
+A=48\ Or A=47\=>\Goto1
+Q=1\=>\Text 6*(6-1)+1,1,"M~~~M~~~M~~~M~~~M~~~M~~~M~~~"
+Q=2\=>\Text 6*(6-1)+1,1,"~M~~~M~~~M~~~M~~~M~~~M~~~M~~"
+Q=3\=>\Text 6*(6-1)+1,1,"~~M~~~M~~~M~~~M~~~M~~~M~~~M~"
+Q=4\=>\Text 6*(6-1)+1,1,"~~~M~~~M~~~M~~~M~~~M~~~M~~~M"
+Q+1\->Q
+Q=5\=>1\->Q
+\LpWhile 1=1
+\Lbl 9
+\Cls
+\ClrText
+\Stop
+%End

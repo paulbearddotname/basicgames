@@ -1,0 +1,301 @@
+%Header Record
+Format:TXT
+Communication SW:0
+Data Type:PG
+Capacity:3735
+File Name:Mines V1
+Group Name:
+Password:
+Option1:NL
+Option2:
+Option3:
+Option4:
+%Data Record
+50\->Q
+90\->W
+{7,13}\->\Dim \Mat P
+{7,13}\->\Dim \Mat C
+\Goto1
+\Lbl 2
+\Locate 1,1,"====MINE SWEEPER====="
+\Locate 1,2,"====INSTRUCTIONS====="
+\Locate 1,3,"#   = UNCHARTED      "
+\Locate 1,4,"@   = CURSOR         "
+\Locate 1,5,"M   = MINE           "
+\Locate 1,6,"0-8 = MINES TOUCHING "
+\Locate 1,7,"===============[NEXT]"
+\For 1\->A \To W
+\Next 
+0\->H
+\Do
+\Do
+\Getkey\->A
+\LpWhile A=0
+A=29\ Or A=39\=>1\->H
+A=48\ Or A=47\=>\Goto1
+\LpWhile H=0
+\Locate 1,1,"====MINE SWEEPER====="
+\Locate 1,2,"====INSTRUCTIONS====="
+\Locate 1,3,"X    = WRONGLY MARKED"
+\Locate 1,4,"SPACE= MARK AS MINE  "
+\Locate 1,5,"EXE  = MARK AS CLEAR "
+\Locate 1,6,"MENU = RETURN TO MENU"
+\Locate 1,7,"[BACK]=========[MENU]"
+\For 1\->A \To W
+\Next 
+\Do
+\Do
+\Getkey\->A
+\LpWhile A=0
+A=79\ Or A=69\=>\Goto2
+A=29\ Or A=39\ Or A=48\ Or A=47\=>\Goto1
+\LpWhile 1=1
+\Lbl 4
+\ClrText
+\Locate 1,1,"====MINE SWEEPER====="
+\Locate 1,2,"  HOW MANY MINES DO  "
+\Locate 1,3,"YOU WANT ON THE FIELD"
+\Locate 1,4,"(CHOOSE FROM 1 TO 91)"
+\Locate 1,5,"====================="
+\Locate 1,7,"[RESET]=[MENU]=[PLAY]"
+\For 1\->A \To W
+\Next 
+0\->H
+0\->J
+\Locate 11,6," 0"
+\Do
+\Do
+\Getkey\->A
+\LpWhile A=0
+A=59\ Or A=49\ Or A=48\ Or A=47\=>\Goto1
+\If A=79\ Or A=69
+\Then 0\->J
+0\->H
+\Locate 11,6," 0"
+\IfEnd
+A=39\ Or A=29\=>1\->H
+\If H=0
+\Then A=72\ Or A=62\ Or A=52\ Or A=73\ Or A=63\ Or A=53\ Or A=74\ Or A=64\ Or A=54\ Or A=71\=>J*10\->J
+A=72\=>J+1\->J
+A=62\=>J+2\->J
+A=52\=>J+3\->J
+A=73\=>J+4\->J
+A=63\=>J+5\->J
+A=53\=>J+6\->J
+A=74\=>J+7\->J
+A=64\=>J+8\->J
+A=54\=>J+9\->J
+J>91\=>91\->J
+J<10\=>\Locate 12,6,J
+J\>=10\=>\Locate 11,6,J
+\IfEnd
+\If A=72\ Or A=62\ Or A=52\ Or A=73\ Or A=63\ Or A=53\ Or A=74\ Or A=64\ Or A=54\ Or A=71
+\Then \For 1\->A \To W
+\Next 
+\IfEnd
+\LpWhile H=0\ Or H=2
+J<1\ Or J>91\=>\Goto4
+\ClrText
+\Locate 1,1,"====MINE SWEEPER====="
+\Locate 1,2,"   GENERATING GAME   "
+\Locate 1,3,"     PLEASE WAIT     "
+\Locate 1,4,"====================="
+0\->Z
+0\->Y
+J\->X
+7\->N
+4\->M
+0\->T
+0\->G
+\For 1\->U \To 7
+\For 1\->I \To 13
+9\->\Mat C[U,I]
+0\->\Mat P[U,I]
+\Next 
+\Next 
+1\->U
+\Lbl 3
+14*\Ran#\->B
+8*\Ran#\->V
+\Int V\->V
+\Int B\->B
+V=0\ Or B=0\=>\Goto3
+\If \Mat P[V,B]=10
+\Then \Goto3
+\IfEnd
+10\->\Mat P[V,B]
+\For 1\->K \To 8
+K=1\=>V-1\->E
+K=1\=>B-1\->F
+K=2\=>V\->E
+K=2\=>B-1\->F
+K=3\=>V+1\->E
+K=3\=>B-1\->F
+K=4\=>V-1\->E
+K=4\=>B\->F
+K=5\=>V+1\->E
+K=5\=>B\->F
+K=6\=>V-1\->E
+K=6\=>B+1\->F
+K=7\=>V\->E
+K=7\=>B+1\->F
+K=8\=>V+1\->E
+K=8\=>B+1\->F
+\If F>0\ And F<14\ And E>0\ And E<8
+\Then \Mat P[E,F]\<>10\=>\Mat P[E,F]+1\->\Mat P[E,F]
+\IfEnd
+\Next 
+U/J*100\->S
+\Locate 2,5,"                  "
+\Locate 2,5,S
+\Locate 20,5,"\@25"
+U/J*21\->S
+\Int S\->S
+\If S\>=1
+\Then \For 1\->R \To S
+\Locate R,6,"\@25"
+\Next 
+\IfEnd
+\Locate 2,7,"   MINES,"
+\Locate 2,7,U
+\Locate 13,7,"   TO GO"
+\Locate 13,7,J-U
+\If U<J
+\Then U+1\->U
+\Goto3
+\IfEnd
+\Locate 1,1,"+MINE+++#############"
+\Locate 1,2,"SWEEPER+#############"
+\Locate 1,3,"++++++++#############"
+\Locate 1,4,"+TIME+++#############"
+\Locate 1,5,"=      +#############"
+\Locate 1,6,"+MINES++#############"
+\Locate 1,7,"=      +#############"
+\For 1\->A \To W
+\Next 
+\Lbl 7
+\Do
+Y>999999\=>999999\->Y
+\Locate 2,5,"      "
+\Locate 2,7,"      "
+\Locate 2,5,Y
+\Locate 2,7,X
+\Locate N+8,M,"@"
+\Do
+\Getkey\->A
+A\<>0\=>1\->G
+G=1\=>Z+1\->Z
+Z\>=Q\=>Y+1\->Y
+Z\>=Q\=>\Locate 2,5,"      "
+Z\>=Q\=>\Locate 2,5,Y
+Z\>=Q\=>0\->Z
+\LpWhile A=0
+A=61\=>\Goto5
+A=31\=>\Goto6
+A=48\ Or A=47\=>\Goto1
+\If A=28
+\Then \Mat C[M,N]\<>10\=>\Locate N+8,M,\Mat C[M,N]
+\Mat C[M,N]=10\=>\Locate N+8,M,"M"
+\Mat C[M,N]=0\=>\Locate N+8,M," "
+\Mat C[M,N]=9\=>\Locate N+8,M,"#"
+M>1\=>M-1\->M
+\For 1\->A \To W
+\Next 
+\IfEnd
+\If A=37
+\Then \Mat C[M,N]\<>10\=>\Locate N+8,M,\Mat C[M,N]
+\Mat C[M,N]=10\=>\Locate N+8,M,"M"
+\Mat C[M,N]=0\=>\Locate N+8,M," "
+\Mat C[M,N]=9\=>\Locate N+8,M,"#"
+M<7\=>M+1\->M
+\For 1\->A \To W
+\Next 
+\IfEnd
+\If A=38
+\Then \Mat C[M,N]\<>10\=>\Locate N+8,M,\Mat C[M,N]
+\Mat C[M,N]=10\=>\Locate N+8,M,"M"
+\Mat C[M,N]=0\=>\Locate N+8,M," "
+\Mat C[M,N]=9\=>\Locate N+8,M,"#"
+N>1\=>N-1\->N
+\For 1\->A \To W
+\Next 
+\IfEnd
+\If A=27
+\Then \Mat C[M,N]\<>10\=>\Locate N+8,M,\Mat C[M,N]
+\Mat C[M,N]=10\=>\Locate N+8,M,"M"
+\Mat C[M,N]=0\=>\Locate N+8,M," "
+\Mat C[M,N]=9\=>\Locate N+8,M,"#"
+N<13\=>N+1\->N
+\For 1\->A \To W
+\Next 
+\IfEnd
+\LpWhile 1=1
+\Lbl 5
+\If \Mat C[M,N]=9
+\Then X>0\=>10\->\Mat C[M,N]
+X>0\ And \Mat P[M,N]=10\=>T+1\->T
+X>0\=>X-1\->X
+T=J\=>\Locate 1,1,"+YOU+++"
+T=J\=>\Locate 1,2,"++WON++"
+T=J\=>\Goto8
+\For 1\->A \To W
+\Next 
+\Goto7
+\IfEnd
+\If \Mat C[M,N]=10
+\Then 9\->\Mat C[M,N]
+X+1\->X
+\Mat P[M,N]=10\=>T-1\->T
+\For 1\->A \To W
+\Next 
+\Goto7
+\IfEnd
+\Lbl 6
+\If \Mat C[M,N]=9
+\Then \Mat P[M,N]\->\Mat C[M,N]
+\Mat C[M,N]=10\=>\Locate 1,1,"+YOUR++"
+\Mat C[M,N]=10\=>\Locate 1,2,"++DEAD+"
+\Mat C[M,N]=10\=>\Goto8
+\IfEnd
+\For 1\->A \To W
+\Next 
+\Goto7
+\Lbl 8
+\For 1\->U \To 7
+\For 1\->I \To 13
+\Mat P[U,I]\<>10\=>\Locate I+8,U,\Mat P[U,I]
+\Mat P[U,I]=10\=>\Locate I+8,U,"M"
+\Mat P[U,I]=0\=>\Locate I+8,U," "
+\Mat P[U,I]\<>10\ And \Mat C[U,I]=10\=>\Locate I+8,U,"X"
+\Next 
+\Next 
+\For 1\->A \To W
+\Next 
+\Locate 2,5,"      "
+\Locate 2,7,"      "
+\Locate 2,5,Y
+\Locate 2,7,X
+\Do
+\Getkey\->A
+A=48\ Or A=47\=>\Goto1
+\LpWhile 1=1
+\Lbl 1
+\Locate 1,1,"====================="
+\Locate 1,2,"=== MINE SWEEPER  ==="
+\Locate 1,3,"===  VERSION 1    ==="
+\Locate 1,4,"=(C) PAUL BEARD 2005="
+\Locate 1,5,"====================="
+\Locate 1,6,"                     "
+\Locate 1,7,"[EXIT]=[HELP?]=[PLAY]"
+\For 1\->A \To W
+\Next 
+\Do
+\Do
+\Getkey\->A
+\LpWhile A=0
+A=59\ Or A=49\=>\Goto2
+A=79\ Or A=47\ Or A=69\=>\ClrText
+A=79\ Or A=47\ Or A=69\=>\Stop
+A=29\ Or A=39\=>\Goto4
+\LpWhile 1=1
+%End
